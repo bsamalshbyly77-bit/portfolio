@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محمد شوقي — Portfolio</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+:root{
+  --primary:#1E90FF;
+  --accent:#9B30FF;
+  --text:#F0F8FF;
+  --bg:#0D0D1A;
+  --card-bg:rgba(20,20,40,0.85);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body,html{font-family:'Roboto Mono',monospace;background:var(--bg);color:var(--text);scroll-behavior:smooth;overflow-x:hidden;}
+#matrixCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:0.05;}
+
+.container{position:relative;z-index:1;max-width:1200px;margin:40px auto;padding:20px;}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--card-bg);border-radius:10px;margin-bottom:20px;transition:0.3s;}
+header:hover{box-shadow:0 0 20px var(--primary);}
+.logo{color:var(--primary);font-weight:bold;font-size:24px;}header div{text-align:right;}
+
+.hero{display:flex;gap:20px;background:var(--card-bg);padding:20px;border-radius:12px;transition:0.3s;}
+.hero:hover{box-shadow:0 0 20px var(--accent);}
+.hero-left{flex:1;text-align:right;} 
+.hero-left p{font-size:1.1rem;color:var(--text);}
+.hero-left .btn{margin:6px;padding:10px 16px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.3s;font-size:0.95rem;}
+.hero-left .btn:hover{transform:scale(1.05);box-shadow:0 0 18px var(--primary);}
+.btn-primary{background:linear-gradient(90deg,var(--primary),var(--accent));color:#fff;box-shadow:0 6px 18px rgba(30,144,255,0.2);}
+.btn-ghost{background:transparent;color:var(--primary);border:1px solid rgba(30,144,255,0.3);}
+.hero-right img{width:100%;border-radius:10px;border:1px solid rgba(30,144,255,0.06);transition:0.3s;}
+.hero-right img:hover{transform:scale(1.02);box-shadow:0 0 20px var(--accent);}
+
+.section{margin-top:25px;background:var(--card-bg);padding:20px;border-radius:12px;transition:0.3s;}
+.section:hover{box-shadow:0 0 18px var(--primary);}
+.section h2{color:var(--primary);margin-bottom:12px;}
+.grid{display:flex;flex-wrap:wrap;gap:16px;}
+.card{flex:1 1 280px;background:linear-gradient(180deg,#111133,#1a1a33);padding:14px;border-radius:10px;border:1px solid rgba(30,144,255,0.1);transition:0.3s;cursor:pointer;animation:fadeIn 0.8s ease;}
+.card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 0 25px var(--accent);}
+.card img{width:100%;border-radius:8px;margin-bottom:10px;}
+.card h3{color:var(--accent);margin:6px 0;}
+.card p{color:#ccccff;font-size:0.95rem;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+.skills{display:flex;flex-direction:column;gap:10px;}
+.skill{cursor:pointer;background:rgba(20,20,40,0.4);padding:8px;border-radius:6px;border:1px solid rgba(30,144,255,0.2);transition:0.3s;}
+.skill:hover{box-shadow:0 0 15px var(--accent);transform:scale(1.02);}
+.skill .bar{height:12px;background:#111133;border-radius:6px;overflow:hidden;margin-top:4px;}
+.skill .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0;transition:1s;}
+
+.contact{display:flex;flex-direction:column;gap:12px;}
+.contact a{color:var(--primary);text-decoration:none;border-bottom:1px dotted var(--primary);display:flex;align-items:center;gap:6px;transition:0.3s;}
+.contact a:hover{color:var(--accent);transform:scale(1.05);}
+footer{text-align:center;color:var(--accent);padding:12px 0;margin-top:20px;}
+
+/* Modal */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);justify-content:center;align-items:center;z-index:1000;padding:20px;animation:fadeInModal 0.5s;}
+@keyframes fadeInModal{from{opacity:0;}to{opacity:1;}}
+.modal-content{background:var(--card-bg);padding:20px;border-radius:12px;max-width:800px;width:100%;overflow-y:auto;max-height:90vh;position:relative;animation:scaleIn 0.5s;}
+@keyframes scaleIn{from{transform:scale(0.8);}to{transform:scale(1);}}
+.modal-content img{width:100%;border-radius:10px;margin:10px 0;}
+.modal-content h2{color:var(--accent);}
+.close-btn{position:absolute;top:10px;right:15px;font-size:24px;color:var(--primary);cursor:pointer;transition:0.3s;}
+.close-btn:hover{color:var(--accent);}
+
+/* Slider inside modal */
+.slider{position:relative;}
+.slide{display:none;}
+.slide img{width:100%;border-radius:10px;margin:10px 0;}
+.prev, .next{cursor:pointer;position:absolute;top:50%;transform:translateY(-50%);color:var(--primary);font-size:24px;padding:10px;background:rgba(0,0,0,0.3);border-radius:50%;transition:0.3s;}
+.prev:hover,.next:hover{background:rgba(30,144,255,0.6);}
+.prev{left:10px;} .next{right:10px;}
+
+@media(max-width:900px){.hero{flex-direction:column;}.hero-right img{width:100%;}}
+</style>
+</head>
+<body>
+<canvas id="matrixCanvas"></canvas>
+<div class="container">
+<header>
+  <div class="logo">MS</div>
+  <div>
+    <div>محمد شوقي عبدالرحمن</div>
+    <div>الهاتف: 777683924</div>
+    <div>البريد: 6mohamdohs@gmail.com</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-left">
+    <p>مرحبًا! استعرض مشاريعي ومهاراتي وتواصل معي مباشرة.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"><i class="fa fa-envelope"></i> تواصل الآن</button>
+    <button class="btn btn-primary" onclick="window.open('https://wa.me/967777683924?text=مرحبًا! أود التواصل معك','_blank')"><i class="fa fa-whatsapp"></i> واتساب</button>
+    <button class="btn btn-ghost" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})"><i class="fa fa-folder-open"></i> شاهد مشاريعي</button>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=900&q=80" alt="صورة برمجة">
+  </div>
+</div>
+
+<section id="projects" class="section">
+<h2>المشاريع</h2>
+<div class="grid" id="carouselProjects">
+  <div class="card" onclick="openModal('modal1')">
+    <img src="https://images.unsplash.com/photo-1581092795360-27db8ff1b97f?auto=format&fit=crop&w=600&q=80" alt="مشروع1">
+    <h3>مشروع 1 — موقع شخصي</h3>
+    <p>واجهة سريعة ومصممة بعناية.</p>
+  </div>
+  <div class="card" onclick="openModal('modal2')">
+    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=600&q=80" alt="مشروع2">
+    <h3>مشروع 2 — تطبيق ويب</h3>
+    <p>تطبيق تفاعلي مع ميزات حديثة.</p>
+  </div>
+  <div class="card" onclick="openModal('modal3')">
+    <img src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=600&q=80" alt="مشروع3">
+    <h3>مشروع 3 — لوحة تحكم</h3>
+    <p>Dashboard تفاعلية وقابلة للتوسع.</p>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<h2>المهارات</h2>
+<div class="skills">
+  <div class="skill" onclick="alert('HTML — مستوى 95%')">HTML<div class="bar"><i style="width:95%"></i></div></div>
+  <div class="skill" onclick="alert('CSS — مستوى 90%')">CSS<div class="bar"><i style="width:90%"></i></div></div>
+  <div class="skill" onclick="alert('JavaScript — مستوى 85%')">JavaScript<div class="bar"><i style="width:85%"></i></div></div>
+  <div class="skill" onclick="alert('React — مستوى 75%')">React<div class="bar"><i style="width:75%"></i></div></div>
+</div>
+</section>
+
+<section id="contact" class="section contact">
+<h2>تواصل معي</h2>
+<a href="tel:777683924"><i class="fa fa-phone"></i> الهاتف: 777683924</a>
+<a href="mailto:6mohamdohs@gmail.com"><i class="fa fa-envelope"></i> البريد: 6mohamdohs@gmail.com</a>
+<a href="https://wa.me/967777683924?text=مرحبًا! أود التواصل معك" target="_blank"><i class="fa fa-whatsapp"></i> واتساب مباشر</a>
+<div style="margin-top:10px;">
+  <a href="#"><i class="fab fa-facebook"></i> فيسبوك</a>
+  <a href="#"><i class="fab fa-twitter"></i> تويتر</a>
+  <a href="#"><i class="fab fa-linkedin"></i> لينكدإن</a>
+</div>
+</section>
+<footer>© 2025 محمد شوقي — جميع الحقوق محفوظة</footer>
+</div>
+
+<!-- Modals + Sliders -->
+<div id="modal1" class="modal">
+<div class="modal-content">
+<span class="close-btn" onclick="closeModal('modal1')">&times;</span>
+<h2>مشروع 1 — موقع شخصي</h2>
+<div class="slider" data-index="0">
+<img class="slide" src="https://images.unsplash.com/photo-1581092795360-27db8ff1b97f?auto=format&fit=crop&w=600&q=80">
+<img class="slide" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80">
+<img class="slide" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=600&q=80">
+<a class="prev" onclick="changeSlide(this,-1)">&#10094;</a>
+<a class="next" onclick="changeSlide(this,1)">&#10095;</a>
+<p>موقع شخصي لعرض السيرة الذاتية والأعمال باستخدام HTML, CSS, JavaScript.</p>
+</div>
+</div>
+</div>
+
+<div id="modal2" class="modal">
+<div class="modal-content">
+<span class="close-btn" onclick="closeModal('modal2')">&times;</span>
+<h2>مشروع 2 — تطبيق ويب</h2>
+<div class="slider" data-index="0">
+<img class="slide" src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=600&q=80">
+<img class="slide" src="https://images.unsplash.com/photo-1564866657311-1b5f711d9f56?auto=format&fit=crop&w=600&q=80">
+<img class="slide" src="https://images.unsplash.com/photo-1603785017680-76a2a3b8233f?auto=format&fit=crop&w=600&q=80">
+<a class="prev" onclick="changeSlide(this,-1)">&#10094;</a>
+<a class="next" onclick="changeSlide(this,1)">&#10095;</a>
+<p>تطبيق ويب تفاعلي مع HTML, CSS, JavaScript و APIs لتجربة مستخدم سلسة.</p>
+</div>
+</div>
+</div>
+
+<div id="modal3" class="modal">
+<div class="modal-content">
+<span class="close-btn" onclick="closeModal('modal3')">&times;</span>
+<h2>مشروع 3 — لوحة تحكم</h2>
+<div class="slider" data-index="0">
+<img class="slide" src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=600&q=80">
+<img class="slide" src="https://images.unsplash.com/photo-1590608897129-79f1b0c1b487?auto=format&w=600&q=80">
+<img class="slide" src="https://images.unsplash.com/photo-1581093458411-3f3291d1f860?auto=format&w=600&q=80">
+<a class="prev" onclick="changeSlide(this,-1)">&#10094;</a>
+<a class="next" onclick="changeSlide(this,1)">&#10095;</a>
+<p>لوحة تحكم Dashboard تفاعلية تعرض بيانات ومعلومات المستخدم باستخدام HTML, CSS, JavaScript.</p>
+</div>
+</div>
+</div>
+
+<script>
+// Matrix background داكن
+(function(){
+const canvas = document.getElementById('matrixCanvas');
+const ctx = canvas.getContext('2d');
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
+const letters = '01أبجدهيكلمنسعفصقرشتثخذضظغ!@#$%^&*()<>?/\\|[]{}-=_+;:,.';
+const fontSize = Math.max(12, Math.floor(Math.min(w, h)/80));
+const cols = Math.floor(w/fontSize);
+const drops = Array(cols).fill(0);
+function resize(){w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight;}
+window.addEventListener('resize',resize);
+function draw(){ctx.fillStyle='rgba(0,0,10,0.05)'; ctx.fillRect(0,0,w,h); ctx.font=fontSize+'px monospace';for(let i=0;i<drops.length;i++){const text = letters.charAt(Math.floor(Math.random()*letters.length)); const x = i*fontSize; const y = drops[i]*fontSize; ctx.fillStyle='rgba(30,144,255,0.4)'; ctx.fillText(text,x,y);if(y>h && Math.random()>0.975) drops[i]=0; drops[i]++;} requestAnimationFrame(draw);}
+draw();
+})();
+
+// Modal functions
+function openModal(id){document.getElementById(id).style.display='flex';showSlide(document.getElementById(id).querySelector('.slider'));}
+function closeModal(id){document.getElementById(id).style.display='none';}
+
+// Slider functions
+function showSlide(slider){
+  const slides = slider.querySelectorAll('.slide');
+  let index = parseInt(slider.dataset.index);
+  slides.forEach((s,i)=>s.style.display=(i===index?'block':'none'));
+}
+function changeSlide(el, n){
+  const slider = el.parentElement;
+  let index = parseInt(slider.dataset.index);
+  const slides = slider.querySelectorAll('.slide');
+  index += n;
+  if(index<0) index=slides.length-1;
+  if(index>=slides.length) index=0;
+  slider.dataset.index=index;
+  showSlide(slider);
+}
+
+// Auto Carousel Projects
+let carouselIndex=0;
+function autoCarousel(){
+  const cards = document.querySelectorAll('#carouselProjects .card');
+  cards.forEach((c,i)=>c.style.display=(i===carouselIndex?'block':'none'));
+  carouselIndex = (carouselIndex+1)%cards.length;
+  setTimeout(autoCarousel,
+  <!-- مثال على Modal + Slider مع Fade + Scale -->
+<style>
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:1000;}
+.modal-content{background:rgba(20,20,40,0.95);padding:20px;border-radius:12px;max-width:800px;width:90%;transform:scale(0.7);opacity:0;transition:0.5s;}
+.modal.show .modal-content{transform:scale(1);opacity:1;}
+</style>
+
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <span onclick="closeModal('modal1')" style="cursor:pointer;color:#1E90FF;font-size:24px;">&times;</span>
+    <h2>مشروع 1</h2>
+    <div class="slider">
+      <img class="slide" src="https://images.unsplash.com/photo-1581092795360-27db8ff1b97f?auto=format&fit=crop&w=600&q=80" style="width:100%;border-radius:8px;">
+      <img class="slide" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80" style="width:100%;border-radius:8px;">
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(id){
+  const modal = document.getElementById(id);
+  modal.classList.add('show');
+  modal.style.display='flex';
+}
+function closeModal(id){
+  const modal = document.getElementById(id);
+  modal.classList.remove('show');
+  setTimeout(()=>{modal.style.display='none';},500);
+}
+
+// Slider بسيط داخل Modal
+let currentSlide = 0;
+function showSlide(){
+  const slides = document.querySelectorAll('#modal1 .slide');
+  slides.forEach((s,i)=>s.style.display=(i===currentSlide?'block':'none'));
+}
+showSlide();
+setInterval(()=>{
+  const slides = document.querySelectorAll('#modal1 .slide');
+  currentSlide = (currentSlide+1)%slides.length;
+  showSlide();
+},3000);
+</script>
